@@ -7,7 +7,7 @@ import { useMutation } from "urql";
 import { InputField } from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import { RegisterDocument } from "../generated/graphql";
-import { createUrqlClient } from "../utils/CreateUrqlClient";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
 
 interface registerProps {}
@@ -15,13 +15,11 @@ const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
   const [, register] = useMutation(RegisterDocument);
   return (
-    //@ts-expect-error
     <Wrapper variant="small">
       <Formik
         initialValues={{ email: "", username: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           const response = await register({ options: values });
-          //why not working without {}
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {

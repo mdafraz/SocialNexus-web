@@ -16,7 +16,7 @@ import { LoginDocument } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/CreateUrqlClient";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from "next/link";
 
 interface registerProps {}
@@ -24,7 +24,6 @@ const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [, login] = useMutation(LoginDocument);
   return (
-    //@ts-expect-error
     <Wrapper variant="small">
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
@@ -33,7 +32,12 @@ const Login: React.FC<{}> = ({}) => {
 
           if (response.data?.login.errors) {
             setErrors(toErrorMap(response.data.login.errors));
-          } else if (response.data?.login.user) {
+          } else if (
+            response.data?.login.user &&
+            typeof router.query.next === "string"
+          ) {
+            router.push(router.query.next);
+          } else {
             router.push("/");
           }
         }}
@@ -80,3 +84,4 @@ export default withUrqlClient(createUrqlClient)(Login);
 //to make actual graphql request we are gonna use urql
 //graphql code genrator is gonna look at our queries and generate typeScript types for us and generate urql hooks
 //formik has setError
+//how to push next to the desired page after login after

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createUrqlClient } from "../utils/CreateUrqlClient";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import { Box, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { withUrqlClient } from "next-urql";
@@ -15,7 +15,6 @@ const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setcomplete] = useState(false);
   const [, forgotpassword] = useMutation(ForgotPasswordDocument);
   return (
-    //@ts-expect-error
     <Wrapper variant="small">
       <Formik
         initialValues={{ email: "" }}

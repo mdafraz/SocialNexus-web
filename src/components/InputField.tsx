@@ -1,19 +1,45 @@
-import { FormControl, FormLabel, Input, FormErrorMessage } from '@chakra-ui/react';
-import { useField } from 'formik';
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  Textarea,
+} from "@chakra-ui/react";
+import { useField } from "formik";
 
-import React, { InputHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes } from "react";
 
 // !!error === '' => false
 // !!error === 'some error' => true
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
-    name: string;
-    label: string;
+  name: string;
+  label: string;
+  textarea?: boolean;
 };
-export const InputField: React.FC<InputFieldProps> = ({ label,size:_, ...props }) => {
-    const [field, { error }] = useField(props)
-        return (<FormControl isInvalid={!!error}>
-            <FormLabel htmlFor={field.name}>{label}</FormLabel>
-            <Input {...field} {...props} id={field.name} placeholder={props.placeholder} />
-            {error ? <FormErrorMessage>{error}</FormErrorMessage> : null }
-              </FormControl>);
-}
+export const InputField: React.FC<InputFieldProps> = ({
+  label,
+  textarea,
+  size: _,
+  ...props
+}) => {
+  let InputOrTextarea = Input;
+  if (textarea) {
+    //@ts-expect-error
+    InputOrTextarea = Textarea;
+  }
+  const [field, { error }] = useField(props);
+  return (
+    <FormControl isInvalid={!!error}>
+      <FormLabel htmlFor={field.name}>{label}</FormLabel>
+      <InputOrTextarea
+        {...field}
+        {...props}
+        id={field.name}
+        placeholder={props.placeholder}
+      />
+      {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
+    </FormControl>
+  );
+};
+
+// what field does is it simply keeps formik states(initialvalues) in sync with the current input .
