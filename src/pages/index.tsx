@@ -3,6 +3,8 @@ import {
   Button,
   Flex,
   Heading,
+  Icon,
+  IconButton,
   Link,
   Stack,
   Text,
@@ -14,10 +16,11 @@ import { Layout } from "../components/Layout";
 import { PostsDocument } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useState } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 
 const Index = () => {
   const [variables, setVariables] = useState({
-    limit: 10,
+    limit: 15,
     cursor: null as null | string,
   });
   const [{ data, fetching, stale }] = useQuery({
@@ -28,6 +31,7 @@ const Index = () => {
   if (!fetching && !data) {
     return <div>you got query failed for some reason</div>;
   }
+
   return (
     //@ts-expect-error
     <Layout variant="regular">
@@ -43,10 +47,26 @@ const Index = () => {
       ) : (
         <Stack spacing={8} direction="column">
           {data!.posts.posts.map((p) => (
-            <Box p={5} shadow="md" borderWidth="1px" key={p.id}>
-              <Heading fontSize="xl">{p.title}</Heading>
-              <Text mt={4}>{p.textSnippet}</Text>
-            </Box>
+            <Flex p={5} shadow="md" borderWidth="1px" key={p.id}>
+              <Flex
+                direction={"column"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                mr={4}
+              >
+                <IconButton aria-label="updoot post" icon={<ChevronUpIcon />} />
+                {p.points}
+                <IconButton
+                  aria-label="downdoot post"
+                  icon={<ChevronDownIcon />}
+                />
+              </Flex>
+              <Box>
+                <Heading fontSize="xl">{p.title}</Heading>
+                <Text>Posted By {p.creator.username}</Text>
+                <Text mt={4}>{p.textSnippet}</Text>
+              </Box>
+            </Flex>
           ))}
         </Stack>
       )}

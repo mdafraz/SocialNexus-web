@@ -21,7 +21,7 @@ const documents = {
     "mutation Login($usernameOrEmail: String!, $password: String!) {\n  login(usernameOrEmail: $usernameOrEmail, password: $password) {\n    errors {\n      field\n      message\n    }\n    user {\n      ...RegularUser\n    }\n  }\n}": types.LoginDocument,
     "mutation Logout {\n  logout\n}": types.LogoutDocument,
     "query Me {\n  me {\n    ...RegularUser\n  }\n}": types.MeDocument,
-    "query Posts($limit: Int!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    posts {\n      id\n      title\n      createdAt\n      updatedAt\n      textSnippet\n    }\n  }\n}": types.PostsDocument,
+    "query Posts($limit: Int!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    posts {\n      id\n      title\n      createdAt\n      updatedAt\n      textSnippet\n      points\n      creator {\n        id\n        username\n      }\n    }\n  }\n}": types.PostsDocument,
     "mutation Register($options: UsernamePasswordInput!) {\n  register(options: $options) {\n    errors {\n      field\n      message\n    }\n    user {\n      ...RegularUser\n    }\n  }\n}": types.RegisterDocument,
 };
 
@@ -74,7 +74,7 @@ export function graphql(source: "query Me {\n  me {\n    ...RegularUser\n  }\n}"
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query Posts($limit: Int!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    posts {\n      id\n      title\n      createdAt\n      updatedAt\n      textSnippet\n    }\n  }\n}"): (typeof documents)["query Posts($limit: Int!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    posts {\n      id\n      title\n      createdAt\n      updatedAt\n      textSnippet\n    }\n  }\n}"];
+export function graphql(source: "query Posts($limit: Int!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    posts {\n      id\n      title\n      createdAt\n      updatedAt\n      textSnippet\n      points\n      creator {\n        id\n        username\n      }\n    }\n  }\n}"): (typeof documents)["query Posts($limit: Int!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    posts {\n      id\n      title\n      createdAt\n      updatedAt\n      textSnippet\n      points\n      creator {\n        id\n        username\n      }\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

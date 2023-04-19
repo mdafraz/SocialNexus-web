@@ -731,7 +731,7 @@
   dependencies:
     "@chakra-ui/shared-utils" "2.0.5"
 
-"@chakra-ui/icons@^2.0.2":
+"@chakra-ui/icons@^2.0.18":
   version "2.0.18"
   resolved "https://registry.yarnpkg.com/@chakra-ui/icons/-/icons-2.0.18.tgz#6f859d2e0d8f31fea9cb2e6507d65eb65cb95cf5"
   integrity sha512-E/+DF/jw7kdN4/XxCZRnr4FdMXhkl50Q34MVwN9rADWMwPK9uSZPGyC7HOx6rilo7q4bFjYDH3yRj9g+VfbVkg==

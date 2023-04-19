@@ -31,6 +31,7 @@ export const cursorPagination = (): Resolver => {
       cache.resolve(entityKey, Fieldkey) as string,
       "posts"
     );
+
     info.partial = !isItInCache;
     let hasMore = true;
     const results: string[] = [];
@@ -137,6 +138,18 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          createPost: (_result, _args, cache, _info) => {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "posts"
+            );
+            //it will cause to refetch the posts data after post is created
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Query", "posts", {
+                variables: fi.arguments || {},
+              });
+            });
+          },
           login: (_result, _args, cache, _info) => {
             betterUpdateQuery<LoginMutation, MeQuery>(
               cache,
@@ -186,3 +199,6 @@ export const createUrqlClient = (ssrExchange: any) => ({
     fetchExchange,
   ],
 });
+
+//cache.resolve????
+//cache.invalide???
