@@ -11,12 +11,13 @@ import {
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
-import { useQuery } from "urql";
+import { useMutation, useQuery } from "urql";
 import { Layout } from "../components/Layout";
-import { PostsDocument } from "../generated/graphql";
+import { DeletePostDocument, PostsDocument } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronUpIcon, DeleteIcon } from "@chakra-ui/icons";
+import { UpdootSection } from "../components/UpdootSection";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -28,6 +29,7 @@ const Index = () => {
     variables: variables,
   });
 
+  const [, deletePost] = useMutation(DeletePostDocument);
   if (!fetching && !data) {
     return <div>you got query failed for some reason</div>;
   }
@@ -35,36 +37,36 @@ const Index = () => {
   return (
     //@ts-expect-error
     <Layout variant="regular">
-      <Flex align="center">
-        <Heading>Reddit</Heading>
-        <Link ml="auto" as={NextLink} href="/create-post" mr={2}>
-          create Post
-        </Link>
-      </Flex>
-      <br />
       {!data && fetching ? (
         <div>loading...</div>
       ) : (
         <Stack spacing={8} direction="column">
           {data!.posts.posts.map((p) => (
             <Flex p={5} shadow="md" borderWidth="1px" key={p.id}>
-              <Flex
-                direction={"column"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                mr={4}
-              >
-                <IconButton aria-label="updoot post" icon={<ChevronUpIcon />} />
-                {p.points}
-                <IconButton
-                  aria-label="downdoot post"
-                  icon={<ChevronDownIcon />}
-                />
-              </Flex>
               <Box>
-                <Heading fontSize="xl">{p.title}</Heading>
+                <UpdootSection post={p} />
+              </Box>
+              <Box flex={1}>
+                <NextLink href="/post/[id]" as={`/post/${p.id}`}>
+                  <Link>
+                    <Heading fontSize="xl">{p.title}</Heading>
+                  </Link>
+                </NextLink>
+
                 <Text>Posted By {p.creator.username}</Text>
-                <Text mt={4}>{p.textSnippet}</Text>
+                <Flex align="center">
+                  <Text mt={4} flex={1}>
+                    {p.textSnippet}
+                  </Text>
+                  <IconButton
+                    onClick={() => {
+                      deletePost({ id: p.id });
+                    }}
+                    colorScheme="red"
+                    aria-label="Delete Post"
+                    icon={<DeleteIcon />}
+                  />
+                </Flex>
               </Box>
             </Flex>
           ))}
