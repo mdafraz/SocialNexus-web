@@ -13,25 +13,40 @@ import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 import { useMutation, useQuery } from "urql";
 import { Layout } from "../components/Layout";
-import { DeletePostDocument, PostsDocument } from "../generated/graphql";
+import {
+  DeletePostDocument,
+  MeDocument,
+  PostsDocument,
+} from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon, DeleteIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  DeleteIcon,
+  EditIcon,
+} from "@chakra-ui/icons";
 import { UpdootSection } from "../components/UpdootSection";
+import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 
 const Index = () => {
   const [variables, setVariables] = useState({
     limit: 15,
     cursor: null as null | string,
   });
-  const [{ data, fetching, stale }] = useQuery({
+
+  const [{ data, fetching, error }] = useQuery({
     query: PostsDocument,
     variables: variables,
   });
 
-  const [, deletePost] = useMutation(DeletePostDocument);
   if (!fetching && !data) {
-    return <div>you got query failed for some reason</div>;
+    return (
+      <div>
+        <div>you got query failed for some reason</div>
+        <div>{error?.message}</div>
+      </div>
+    );
   }
 
   return (
@@ -41,35 +56,36 @@ const Index = () => {
         <div>loading...</div>
       ) : (
         <Stack spacing={8} direction="column">
-          {data!.posts.posts.map((p) => (
-            <Flex p={5} shadow="md" borderWidth="1px" key={p.id}>
-              <Box>
-                <UpdootSection post={p} />
-              </Box>
-              <Box flex={1}>
-                <NextLink href="/post/[id]" as={`/post/${p.id}`}>
-                  <Link>
-                    <Heading fontSize="xl">{p.title}</Heading>
-                  </Link>
-                </NextLink>
+          {data!.posts.posts.map((p) =>
+            !p ? null : (
+              <Flex p={5} shadow="md" borderWidth="1px" key={p.id}>
+                <Box>
+                  <UpdootSection post={p} />
+                </Box>
+                <Box flex={1}>
+                  <NextLink href="/post/[id]" as={`/post/${p.id}`}>
+                    <Link>
+                      <Heading fontSize="xl">{p.title}</Heading>
+                    </Link>
+                  </NextLink>
 
-                <Text>Posted By {p.creator.username}</Text>
-                <Flex align="center">
-                  <Text mt={4} flex={1}>
-                    {p.textSnippet}
-                  </Text>
-                  <IconButton
-                    onClick={() => {
-                      deletePost({ id: p.id });
-                    }}
-                    colorScheme="red"
-                    aria-label="Delete Post"
-                    icon={<DeleteIcon />}
-                  />
-                </Flex>
-              </Box>
-            </Flex>
-          ))}
+                  <Text>Posted By {p.creator.username}</Text>
+                  <Flex align="center">
+                    <Text mt={4} flex={1}>
+                      {p.textSnippet}
+                    </Text>
+
+                    {
+                      <EditDeletePostButtons
+                        id={p.id}
+                        creatorId={p.creator.id}
+                      />
+                    }
+                  </Flex>
+                </Box>
+              </Flex>
+            )
+          )}
         </Stack>
       )}
       {data && data.posts.hasMore ? (
@@ -96,3 +112,4 @@ const Index = () => {
 export default withUrqlClient(createUrqlClient)(Index);
 
 //for forgot password we will use nodemailer
+// add something so that when you come back to the home page after going to other page then it will not scoll you to the top

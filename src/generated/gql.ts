@@ -26,6 +26,7 @@ const documents = {
     "query Post($id: Int!) {\n  post(id: $id) {\n    id\n    title\n    createdAt\n    updatedAt\n    text\n    voteStatus\n    points\n    creator {\n      id\n      username\n    }\n  }\n}": types.PostDocument,
     "query Posts($limit: Int!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    posts {\n      id\n      title\n      createdAt\n      updatedAt\n      textSnippet\n      voteStatus\n      points\n      creator {\n        id\n        username\n      }\n    }\n  }\n}": types.PostsDocument,
     "mutation Register($options: UsernamePasswordInput!) {\n  register(options: $options) {\n    errors {\n      field\n      message\n    }\n    user {\n      ...RegularUser\n    }\n  }\n}": types.RegisterDocument,
+    "mutation UpdatePost($id: Int!, $title: String!, $text: String!) {\n  updatePost(id: $id, title: $title, text: $text) {\n    id\n    text\n    title\n    textSnippet\n  }\n}": types.UpdatePostDocument,
     "mutation Vote($value: Int!, $postId: Int!) {\n  vote(value: $value, postId: $postId)\n}": types.VoteDocument,
 };
 
@@ -95,6 +96,10 @@ export function graphql(source: "query Posts($limit: Int!, $cursor: String) {\n 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation Register($options: UsernamePasswordInput!) {\n  register(options: $options) {\n    errors {\n      field\n      message\n    }\n    user {\n      ...RegularUser\n    }\n  }\n}"): (typeof documents)["mutation Register($options: UsernamePasswordInput!) {\n  register(options: $options) {\n    errors {\n      field\n      message\n    }\n    user {\n      ...RegularUser\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation UpdatePost($id: Int!, $title: String!, $text: String!) {\n  updatePost(id: $id, title: $title, text: $text) {\n    id\n    text\n    title\n    textSnippet\n  }\n}"): (typeof documents)["mutation UpdatePost($id: Int!, $title: String!, $text: String!) {\n  updatePost(id: $id, title: $title, text: $text) {\n    id\n    text\n    title\n    textSnippet\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

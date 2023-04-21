@@ -6,6 +6,7 @@ import { Query, useQuery } from "urql";
 import { PostDocument } from "../../generated/graphql";
 import { Layout } from "../../components/Layout";
 import { Box, Heading } from "@chakra-ui/react";
+import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 
 export const Post = ({}) => {
   const router = useRouter();
@@ -34,9 +35,13 @@ export const Post = ({}) => {
 
   return (
     //@ts-expect-error
-    <Layout variant="small">
+    <Layout variant="regular">
       <Heading mb={4}>{data.post.title}</Heading>
-      {data.post.text}
+      <Box mb={4}>{data.post.text}</Box>
+      <EditDeletePostButtons
+        id={data.post.id}
+        creatorId={data.post.creator.id}
+      />
     </Layout>
   );
 };

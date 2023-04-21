@@ -6,6 +6,7 @@ import {
   RegisterMutation,
   LogoutMutation,
   VoteMutationVariables,
+  DeletePostMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
@@ -142,6 +143,12 @@ export const createUrqlClient = (ssrExchange: any) => {
         },
         updates: {
           Mutation: {
+            deletePost: (_result, args, cache, info) => {
+              cache.invalidate({
+                __typename: "Post",
+                id: (args as DeletePostMutationVariables).id,
+              });
+            },
             vote: (_result, args, cache, info) => {
               // can do it in a different way too
               const { value, postId } = args as VoteMutationVariables;
@@ -245,3 +252,4 @@ export const createUrqlClient = (ssrExchange: any) => {
 //browser -> nextjs server -> graphqlApi
 //client-side rendering
 //browser -> graphqlApi
+//  i think here we play with cache to rerender
