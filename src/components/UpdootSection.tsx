@@ -27,9 +27,8 @@ export const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
           if (post.voteStatus === 1) {
             return;
           }
-          setLoadingState("updoot-loading");
+
           vote({ postId: post.id, value: 1 });
-          setLoadingState("not-loading");
         }}
         isLoading={loadingState === "updoot-loading"}
         icon={<ChevronUpIcon />}

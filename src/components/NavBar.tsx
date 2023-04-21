@@ -1,10 +1,9 @@
 import { Box, Button, Flex, Heading, Link } from "@chakra-ui/react";
-import React from "react";
 import NextLink from "next/link";
+import React from "react";
 import { useMutation, useQuery } from "urql";
 import { LogoutDocument, MeDocument } from "../generated/graphql";
 
-import { isServer } from "../utils/isServer";
 interface NavBarProps {}
 
 const NavBar: React.FC<NavBarProps> = ({}) => {
@@ -45,9 +44,9 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
         </Box>
         <Button
           isLoading={fetching}
-          onClick={() => {
+          onClick={async () => {
             //@ts-expect-error
-            logout();
+            await logout();
           }}
           variant={"link"}
         >

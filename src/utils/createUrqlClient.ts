@@ -9,7 +9,7 @@ import {
   DeletePostMutationVariables,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
-import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
 import { pipe, tap } from "wonka";
 import { Exchange } from "urql";
 import Router from "next/router";
@@ -124,6 +124,16 @@ export const errorExchange: Exchange =
       })
     );
   };
+function invalidateAllPost(cache: Cache) {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter((info) => info.fieldName === "posts");
+  //it will cause to refetch the posts data after post is created
+  fieldInfos.forEach((fi) => {
+    cache.invalidate("Query", "posts", {
+      variables: fi.arguments || {},
+    });
+  });
+}
 
 export const createUrqlClient = (ssrExchange: any) => {
   return {
@@ -184,16 +194,7 @@ export const createUrqlClient = (ssrExchange: any) => {
               }
             },
             createPost: (_result, _args, cache, _info) => {
-              const allFields = cache.inspectFields("Query");
-              const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "posts"
-              );
-              //it will cause to refetch the posts data after post is created
-              fieldInfos.forEach((fi) => {
-                cache.invalidate("Query", "posts", {
-                  variables: fi.arguments || {},
-                });
-              });
+              invalidateAllPost(cache);
             },
             login: (_result, _args, cache, _info) => {
               betterUpdateQuery<LoginMutation, MeQuery>(
@@ -210,6 +211,7 @@ export const createUrqlClient = (ssrExchange: any) => {
                   };
                 }
               );
+              invalidateAllPost(cache);
             },
             register: (_result, _args, cache, _info) => {
               betterUpdateQuery<RegisterMutation, MeQuery>(
@@ -247,7 +249,8 @@ export const createUrqlClient = (ssrExchange: any) => {
 };
 
 //cache.resolve????
-//cache.invalide???
+//cache.invalide??? what i think is it delete cache and refetch it
+// like if cache is there then the querey is not run and it takes values from cache so we invalidate it
 //ssr
 //browser -> nextjs server -> graphqlApi
 //client-side rendering
