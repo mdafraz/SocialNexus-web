@@ -56,4 +56,3 @@ const CreatePost: React.FC<{}> = ({}) => {
 
 export { CreatePost };
 export default withUrqlClient(createUrqlClient)(CreatePost);
-//we use withUrqlClient so that we have access to the urql client and we do mutation

@@ -110,6 +110,3 @@ const Index = () => {
 };
 
 export default withUrqlClient(createUrqlClient)(Index);
-
-//for forgot password we will use nodemailer
-// add something so that when you come back to the home page after going to other page then it will not scoll you to the top

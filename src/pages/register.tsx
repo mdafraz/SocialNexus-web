@@ -65,8 +65,3 @@ const Register: React.FC<registerProps> = ({}) => {
 
 export { Register };
 export default withUrqlClient(createUrqlClient)(Register);
-//what is id in the input field
-//to make actual graphql request we are gonna use urql
-//graphql code genrator is gonna look at our queries and generate typeScript types for us and generate urql hooks
-//formik has setError
-//what is server side render pages

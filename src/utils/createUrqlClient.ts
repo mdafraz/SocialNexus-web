@@ -162,8 +162,6 @@ export const createUrqlClient = (ssrExchange: any) => {
             vote: (_result, args, cache, info) => {
               // can do it in a different way too
               const { value, postId } = args as VoteMutationVariables;
-              //as i understand ?
-              //readFragment and write fragment will read and write the cache in the browser and does not make changes in the server
 
               const data = cache.readFragment(
                 gql`
@@ -247,12 +245,3 @@ export const createUrqlClient = (ssrExchange: any) => {
     ],
   };
 };
-
-//cache.resolve????
-//cache.invalide??? what i think is it delete cache and refetch it
-// like if cache is there then the querey is not run and it takes values from cache so we invalidate it
-//ssr
-//browser -> nextjs server -> graphqlApi
-//client-side rendering
-//browser -> graphqlApi
-//  i think here we play with cache to rerender

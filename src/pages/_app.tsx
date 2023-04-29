@@ -11,5 +11,3 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default MyApp;
-
-// NEED TO REVIEW THE CACHING PROCEDURE

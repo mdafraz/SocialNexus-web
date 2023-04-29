@@ -41,5 +41,3 @@ export const InputField: React.FC<InputFieldProps> = ({
     </FormControl>
   );
 };
-
-// what field does is it simply keeps formik states(initialvalues) in sync with the current input .

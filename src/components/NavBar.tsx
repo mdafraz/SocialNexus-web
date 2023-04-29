@@ -68,6 +68,3 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
 };
 
 export default NavBar;
-
-//it is a special nextjs component and using this component we can navigate to pages
-//zIndex={1} position="sticky" top={0} bg??????

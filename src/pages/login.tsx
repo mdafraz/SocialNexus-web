@@ -80,8 +80,3 @@ const Login: React.FC<{}> = ({}) => {
 
 export { Login };
 export default withUrqlClient(createUrqlClient)(Login);
-//what is id in the input field
-//to make actual graphql request we are gonna use urql
-//graphql code genrator is gonna look at our queries and generate typeScript types for us and generate urql hooks
-//formik has setError
-//how to push next to the desired page after login after
